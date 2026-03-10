@@ -1,0 +1,22 @@
+plugin: amazon.aws.aws_ec2
+
+regions:
+  - us-east-1
+
+hostnames:
+  - private-ip-address
+
+compose:
+  ansible_host: private_ip_address
+
+keyed_groups:
+  - key: tags.Environment
+    prefix: env
+
+groups:
+  env_dev: "'dev' in tags.Environment"
+
+vars:
+  ansible_connection: aws_ssm
+  ansible_user: ubuntu
+  ansible_python_interpreter: /usr/bin/python3

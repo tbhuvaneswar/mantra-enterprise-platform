@@ -1,0 +1,25 @@
+name: Build Golden Image
+
+on:
+  push:
+    paths:
+      - 'packer/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Initialize
+        run: packer init packer/
+
+      - name: Validate
+        run: packer validate -var "image_version=1.0.${{ github.run_number }}" packer/
+
+      - name: Build
+        run: packer build -var "image_version=1.0.${{ github.run_number }}" packer/
